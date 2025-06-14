@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Absurd Trauma Response Diagnostic</title>
+    <title>Trauma Response Diagnostic - Dark Edition</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
         
         :root {
-            --fight-color: #ff4757;
-            --flight-color: #3742fa;
-            --freeze-color: #70a1ff;
-            --fawn-color: #ffa502;
-            --bg-dark: #1a1a2e;
-            --bg-darker: #16213e;
-            --text-light: #eee;
-            --accent-purple: #a55eea;
-            --accent-pink: #fd79a8;
-            --accent-cyan: #00d2d3;
+            --fight-color: #ff073a;
+            --flight-color: #00f5ff;
+            --freeze-color: #7209b7;
+            --fawn-color: #f1c40f;
+            --bg-void: #0b0b0f;
+            --bg-abyss: #1a1a1f;
+            --bg-shadow: #2a2a35;
+            --text-ghost: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --accent-toxic: #39ff14;
+            --accent-blood: #ff0040;
+            --accent-void: #8b00ff;
+            --accent-decay: #ff6b00;
         }
 
         * {
@@ -27,124 +30,160 @@
         }
 
         body {
-            font-family: 'Fredoka', cursive;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
-            color: var(--text-light);
+            font-family: 'Space Grotesk', sans-serif;
+            background: radial-gradient(ellipse at top, var(--bg-abyss) 0%, var(--bg-void) 100%);
+            color: var(--text-ghost);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
-        .stars {
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(139, 0, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .glitch-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(57, 255, 20, 0.02) 2px,
+                    rgba(57, 255, 20, 0.02) 4px
+                );
+            animation: glitchScan 3s linear infinite;
         }
 
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 2s infinite alternate;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.9; }
+        @keyframes glitchScan {
+            0%, 100% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(100vh); opacity: 0.1; }
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;
             position: relative;
             z-index: 10;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transform: perspective(1000px) rotateX(5deg);
-            animation: float 6s ease-in-out infinite;
+            margin-bottom: 50px;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(42, 42, 53, 0.6));
+            border: 1px solid rgba(57, 255, 20, 0.3);
+            border-radius: 10px;
+            box-shadow: 
+                0 0 50px rgba(57, 255, 20, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes float {
-            0%, 100% { transform: perspective(1000px) rotateX(5deg) translateY(0px); }
-            50% { transform: perspective(1000px) rotateX(5deg) translateY(-10px); }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--accent-toxic), transparent);
+            animation: rotate 20s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .header h1 {
-            font-size: 2.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            background: linear-gradient(45deg, #fff, #f1c40f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 
+                0 0 10px var(--accent-toxic),
+                0 0 20px var(--accent-toxic),
+                0 0 30px var(--accent-toxic);
+            color: var(--text-ghost);
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            opacity: 0.8;
             font-weight: 400;
+            color: var(--text-dim);
+            position: relative;
+            z-index: 1;
+            font-style: italic;
         }
 
         .question-container {
             display: none;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            transform: scale(0.9);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 26, 31, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 45px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transform: translateY(50px);
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+        }
+
+        .question-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-toxic), transparent);
+            opacity: 0.5;
         }
 
         .question-container.active {
             display: block;
-            transform: scale(1);
+            transform: translateY(0);
             opacity: 1;
-            animation: slideInBounce 0.8s ease-out;
-        }
-
-        @keyframes slideInBounce {
-            0% {
-                transform: translateY(50px) scale(0.8);
-                opacity: 0;
-            }
-            60% {
-                transform: translateY(-10px) scale(1.05);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
         }
 
         .question {
-            font-size: 1.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
             font-weight: 600;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             text-align: center;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-ghost);
             line-height: 1.4;
+            text-shadow: 0 0 10px rgba(224, 224, 224, 0.3);
         }
 
         .options {
@@ -154,17 +193,18 @@
         }
 
         .option {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border: 2px solid transparent;
-            border-radius: 15px;
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(42, 42, 53, 0.4));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 400;
             position: relative;
             overflow: hidden;
+            color: var(--text-dim);
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         .option::before {
@@ -174,8 +214,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.1), transparent);
+            transition: left 0.6s ease;
         }
 
         .option:hover::before {
@@ -183,148 +223,223 @@
         }
 
         .option:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 10px 25px rgba(0, 210, 211, 0.3);
+            transform: translateX(10px);
+            border-color: var(--accent-toxic);
+            color: var(--text-ghost);
+            box-shadow: 
+                0 5px 15px rgba(57, 255, 20, 0.2),
+                inset 0 1px 0 rgba(57, 255, 20, 0.1);
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            margin-bottom: 20px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-bottom: 30px;
             overflow: hidden;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink), var(--accent-cyan));
+            background: linear-gradient(90deg, var(--accent-toxic), var(--accent-blood), var(--accent-void));
             width: 0%;
-            transition: width 0.5s ease;
-            border-radius: 4px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .result {
             display: none;
             text-align: center;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 50px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 26, 31, 0.8));
+            border-radius: 10px;
+            padding: 60px 40px;
             border: 2px solid;
-            animation: resultPulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes resultPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+        .result::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, currentColor, transparent);
+            animation: borderGlow 3s linear infinite;
+            z-index: -1;
+            border-radius: 10px;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.3; }
         }
 
         .result.fight {
             border-color: var(--fight-color);
-            background: linear-gradient(135deg, rgba(255, 71, 87, 0.2), rgba(255, 71, 87, 0.1));
+            color: var(--fight-color);
         }
 
         .result.flight {
             border-color: var(--flight-color);
-            background: linear-gradient(135deg, rgba(55, 66, 250, 0.2), rgba(55, 66, 250, 0.1));
+            color: var(--flight-color);
         }
 
         .result.freeze {
             border-color: var(--freeze-color);
-            background: linear-gradient(135deg, rgba(112, 161, 255, 0.2), rgba(112, 161, 255, 0.1));
+            color: var(--freeze-color);
         }
 
         .result.fawn {
             border-color: var(--fawn-color);
-            background: linear-gradient(135deg, rgba(255, 165, 2, 0.2), rgba(255, 165, 2, 0.1));
+            color: var(--fawn-color);
         }
 
         .result-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
+            font-size: 5rem;
+            margin-bottom: 25px;
+            animation: pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px currentColor);
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
         }
 
         .result-title {
-            font-size: 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.8rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px currentColor;
         }
 
         .result-description {
-            font-size: 1.3rem;
-            line-height: 1.6;
-            opacity: 0.9;
-            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--text-ghost);
+            margin-bottom: 40px;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .restart-btn {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            border: none;
-            border-radius: 50px;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: white;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(42, 42, 53, 0.6));
+            border: 1px solid var(--accent-toxic);
+            border-radius: 6px;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-ghost);
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Fredoka', cursive;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .restart-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, var(--accent-toxic) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+
+        .restart-btn:hover::before {
+            width: 300px;
+            height: 300px;
+            opacity: 0.1;
         }
 
         .restart-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(57, 255, 20, 0.2);
+            border-color: var(--text-ghost);
         }
 
-        .floating-elements {
+        .floating-skulls {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 2;
+            z-index: 3;
         }
 
-        .floating-emoji {
+        .floating-skull {
             position: absolute;
-            font-size: 2rem;
-            animation: floatAround 10s linear infinite;
-            opacity: 0.6;
+            font-size: 1.5rem;
+            animation: floatSkulls 15s linear infinite;
+            opacity: 0.2;
         }
 
-        @keyframes floatAround {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-100px) rotate(360deg); }
+        @keyframes floatSkulls {
+            0% { 
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { 
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         @media (max-width: 768px) {
-            .header h1 { font-size: 2.2rem; }
-            .question { font-size: 1.5rem; }
-            .option { font-size: 1rem; }
-            .result { padding: 30px; }
-            .result-title { font-size: 2rem; }
+            .container { padding: 20px; }
+            .header h1 { font-size: 2rem; }
+            .question { font-size: 1.4rem; }
+            .option { font-size: 0.9rem; padding: 20px; }
+            .result { padding: 40px 25px; }
+            .result-title { font-size: 2.2rem; }
             .result-description { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="floating-elements"></div>
+    <div class="glitch-overlay"></div>
+    <div class="floating-skulls"></div>
     
     <div class="container">
         <div class="header">
-            <h1>🧠✨ The Absurd Trauma Response Diagnostic ✨🧠</h1>
-            <p>Discover your chaotic coping mechanisms through wildly specific scenarios!</p>
+            <h1>⚠️ TRAUMA.EXE DIAGNOSTIC ⚠️</h1>
+            <p>Analyzing your psychological malfunction patterns...</p>
         </div>
 
         <div class="progress-bar">
@@ -332,100 +447,100 @@
         </div>
 
         <div class="question-container active" data-question="0">
-            <div class="question">Do you feel like punching the air but also want to cry into a soft couch? 🥊😭</div>
+            <div class="question">Do you oscillate between wanting to commit violence and dissolving into furniture? 🥊💀</div>
             <div class="options">
-                <div class="option" data-response="fight-freeze">Yes, and I've actually done both simultaneously</div>
-                <div class="option" data-response="flight">No, I just run away from my feelings</div>
-                <div class="option" data-response="fawn">I apologize to the couch for existing</div>
-                <div class="option" data-response="freeze">I just stare at the wall instead</div>
+                <div class="option" data-response="fight-freeze">Yes, I'm a walking contradiction of rage and dissociation</div>
+                <div class="option" data-response="flight">I just yeeet myself out of reality entirely</div>
+                <div class="option" data-response="fawn">I grovel to the furniture for existing near it</div>
+                <div class="option" data-response="freeze">I become the furniture. Problem solved.</div>
             </div>
         </div>
 
         <div class="question-container" data-question="1">
-            <div class="question">Did you just forget where your legs are? 🦵❓</div>
+            <div class="question">Have your legs filed for divorce from your consciousness? 🦵💔</div>
             <div class="options">
-                <div class="option" data-response="freeze">Wait, I have legs? Since when?</div>
-                <div class="option" data-response="flight">I'm already running with ghost legs</div>
-                <div class="option" data-response="fight">I'm angry at my legs for abandoning me</div>
-                <div class="option" data-response="fawn">Sorry legs, I'll try to remember you exist</div>
+                <div class="option" data-response="freeze">What legs? I'm just a floating torso of anxiety</div>
+                <div class="option" data-response="flight">My legs are three miles ahead of my brain</div>
+                <div class="option" data-response="fight">I'm pissed at my legs for ghosting me</div>
+                <div class="option" data-response="fawn">I'm sorry, legs. I'll try to be a better host.</div>
             </div>
         </div>
 
         <div class="question-container" data-question="2">
-            <div class="question">Are you speaking in email apology form IRL? 📧😰</div>
+            <div class="question">Do you speak exclusively in corporate trauma language? 📧⚰️</div>
             <div class="options">
-                <div class="option" data-response="fawn">"Per my previous existence, I'm sorry for breathing"</div>
-                <div class="option" data-response="fight">"Actually, YOU should apologize to ME"</div>
-                <div class="option" data-response="flight">I've already left the conversation mentally</div>
-                <div class="option" data-response="freeze">*error 404: social skills not found*</div>
+                <div class="option" data-response="fawn">"I sincerely apologize for my continued existence in this space"</div>
+                <div class="option" data-response="fight">"As per my last breakdown, f*ck you very much"</div>
+                <div class="option" data-response="flight">*Left meeting* *Left reality* *Left dimension*</div>
+                <div class="option" data-response="freeze">*Error 404: Human.exe has stopped responding*</div>
             </div>
         </div>
 
         <div class="question-container" data-question="3">
-            <div class="question">Did you cry because of a sock texture? 🧦💧</div>
+            <div class="question">Did fabric texture just emotionally destroy you? 🧦💀</div>
             <div class="options">
-                <div class="option" data-response="freeze">The sock betrayed me, so I became one with sadness</div>
-                <div class="option" data-response="fight">I threw the sock across the room aggressively</div>
-                <div class="option" data-response="flight">I immediately bought 47 new pairs of socks online</div>
-                <div class="option" data-response="fawn">I apologized to the sock for my inadequate feet</div>
+                <div class="option" data-response="freeze">The sock committed a hate crime against my nervous system</div>
+                <div class="option" data-response="fight">I declared war on all cotton-poly blends</div>
+                <div class="option" data-response="flight">I'm now ordering silk everything at 4 AM</div>
+                <div class="option" data-response="fawn">I apologized to the sock for having inadequate skin</div>
             </div>
         </div>
 
         <div class="question-container" data-question="4">
-            <div class="question">Did you yell at a Zoom meeting and then spiral into shame? 📹😱</div>
+            <div class="question">Did you verbally combust on Zoom then spiral into the void? 📹🔥</div>
             <div class="options">
-                <div class="option" data-response="fight-fawn">Yes, then I wrote a 3-page apology email</div>
-                <div class="option" data-response="flight">I "had connection issues" and disappeared</div>
-                <div class="option" data-response="freeze">I turned into a frozen fish stick on camera</div>
-                <div class="option" data-response="fawn">I offered to resign from existing</div>
+                <div class="option" data-response="fight-fawn">Yes, then I drafted my resignation from humanity</div>
+                <div class="option" data-response="flight">I mysteriously "lost connection" to avoid consequences</div>
+                <div class="option" data-response="freeze">I became a frozen screenshot of regret</div>
+                <div class="option" data-response="fawn">I offered to pay everyone's therapy bills</div>
             </div>
         </div>
 
         <div class="question-container" data-question="5">
-            <div class="question">Do you collect emotional support items like a trauma dragon? 🐉🧸</div>
+            <div class="question">Are you hoarding comfort objects like a depressed dragon? 🐉💀</div>
             <div class="options">
-                <div class="option" data-response="fawn">Yes, and I apologize to each one for being needy</div>
-                <div class="option" data-response="freeze">I have one blanket I haven't moved from in 3 days</div>
-                <div class="option" data-response="flight">I buy them online at 3 AM to avoid feelings</div>
-                <div class="option" data-response="fight">I aggressively hug them while muttering complaints</div>
+                <div class="option" data-response="fawn">Yes, and I thank each one for tolerating my neediness</div>
+                <div class="option" data-response="freeze">I'm one with my weighted blanket now. We are eternal.</div>
+                <div class="option" data-response="flight">I impulse-buy emotional support items to avoid feelings</div>
+                <div class="option" data-response="fight">I aggressively clutch my comfort items while cursing existence</div>
             </div>
         </div>
 
         <!-- Results -->
         <div class="result fight">
             <div class="result-icon">🐍</div>
-            <div class="result-title">FIGHT MODE ACTIVATED</div>
+            <div class="result-title">FIGHT PROTOCOL ENGAGED</div>
             <div class="result-description">
-                You're the spicy trauma response! When life gets weird, you become a beautiful disaster of righteous fury mixed with occasional apologetic confusion. You're like a cactus with anxiety - prickly on the outside, soft and overthinking on the inside. Your superpower is being simultaneously ready to fight a parking meter AND write a formal apology letter to it.
+                Congratulations, you're a beautiful disaster of controlled chaos. Your nervous system has chosen violence as its primary operating system, but with a delightful twist of apologetic confusion. You're basically a feral cat that writes thank-you notes - ready to destroy everything while simultaneously feeling bad about it. Your trauma response is premium-grade spite with a side of existential dread.
             </div>
-            <button class="restart-btn" onclick="restartQuiz()">Take This Chaos Again 🔄</button>
+            <button class="restart-btn" onclick="restartQuiz()">RESTART MALFUNCTION</button>
         </div>
 
         <div class="result flight">
             <div class="result-icon">🐇</div>
-            <div class="result-title">FLIGHT MODE ENGAGED</div>
+            <div class="result-title">FLIGHT MODE INITIATED</div>
             <div class="result-description">
-                You're the Usain Bolt of emotional avoidance! Your legs might disappear, but your mind is already three states away buying unnecessary items online. You've turned running away into an art form - both literally and metaphorically. You're basically a ghost who still pays taxes and apologizes for haunting people.
+                You're the Houdini of emotional avoidance - except instead of escaping from handcuffs, you're escaping from feelings. Your superpower is being physically present while your soul is already three states away buying unnecessary shit online. You've turned dissociation into an art form. Your legs might have abandoned you, but your credit card is working overtime.
             </div>
-            <button class="restart-btn" onclick="restartQuiz()">Escape This Quiz Again 🔄</button>
+            <button class="restart-btn" onclick="restartQuiz()">ESCAPE AGAIN</button>
         </div>
 
         <div class="result freeze">
             <div class="result-icon">🧊</div>
-            <div class="result-title">FREEZE MODE LOCKED</div>
+            <div class="result-title">FREEZE SEQUENCE ACTIVATED</div>
             <div class="result-description">
-                You're the human equivalent of a Windows computer trying to load a simple task. When overwhelmed, you transform into a beautiful statue of confusion, complete with "buffering" face. You've mastered the art of being present in body but having your soul temporarily relocated to another dimension. Sock textures are your kryptonite.
+                You're the human equivalent of a computer trying to run 47 programs at once - everything just stops working. When overwhelmed, you transform into a sentient statue with the emotional processing power of a broken calculator. You've mastered the art of being present in body while your brain has temporarily relocated to another dimension. Sock textures are your kryptonite, and you're not sorry about it.
             </div>
-            <button class="restart-btn" onclick="restartQuiz()">Unfreeze and Retry 🔄</button>
+            <button class="restart-btn" onclick="restartQuiz()">DEFROST SYSTEM</button>
         </div>
 
         <div class="result fawn">
             <div class="result-icon">🐦</div>
-            <div class="result-title">FAWN MODE PERFECTED</div>
+            <div class="result-title">FAWN SUBROUTINE ACTIVE</div>
             <div class="result-description">
-                You're the golden retriever of trauma responses - aggressively helpful and apologetic about existing! You've turned people-pleasing into an Olympic sport. You write apology emails to inanimate objects and thank your therapist for letting you pay them. Your biggest fear is someone being slightly inconvenienced by your presence on Earth.
+                You're the human embodiment of "sorry for existing" - a walking apology with anxiety sprinkles. You've weaponized people-pleasing to an Olympic level. Your biggest fear isn't death; it's someone being mildly inconvenienced by your presence on this planet. You write apology emails to inanimate objects and thank your therapist for letting you pay them. You're basically a golden retriever having an existential crisis.
             </div>
-            <button class="restart-btn" onclick="restartQuiz()">Apologetically Retake 🔄</button>
+            <button class="restart-btn" onclick="restartQuiz()">APOLOGETICALLY RETRY</button>
         </div>
     </div>
 
@@ -436,36 +551,24 @@
         const progressFill = document.querySelector('.progress-fill');
         const results = document.querySelectorAll('.result');
 
-        // Create floating stars
-        function createStars() {
-            const starsContainer = document.querySelector('.stars');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 2 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // Create floating emojis
-        function createFloatingEmojis() {
-            const emojis = ['🧠', '💫', '🌟', '✨', '🎭', '🎪', '🎨', '🔮'];
-            const container = document.querySelector('.floating-elements');
+        // Create floating dark elements
+        function createFloatingElements() {
+            const darkEmojis = ['💀', '⚰️', '🔥', '💔', '⚡', '🌙', '🗲', '☠️'];
+            const container = document.querySelector('.floating-skulls');
             
             setInterval(() => {
                 const emoji = document.createElement('div');
-                emoji.className = 'floating-emoji';
-                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.className = 'floating-skull';
+                emoji.textContent = darkEmojis[Math.floor(Math.random() * darkEmojis.length)];
                 emoji.style.left = Math.random() * 100 + '%';
-                emoji.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                emoji.style.animationDuration = (Math.random() * 8 + 12) + 's';
+                emoji.style.animationDelay = Math.random() * 2 + 's';
                 container.appendChild(emoji);
                 
                 setTimeout(() => {
                     emoji.remove();
-                }, 15000);
-            }, 3000);
+                }, 20000);
+            }, 4000);
         }
 
         // Handle option clicks
@@ -474,15 +577,18 @@
                 const response = e.target.getAttribute('data-response');
                 responses.push(response);
                 
-                // Add click animation
-                e.target.style.transform = 'scale(0.95)';
+                // Add glitch effect on click
+                e.target.style.filter = 'contrast(1.5) brightness(1.2)';
+                e.target.style.transform = 'translateX(10px) scale(0.98)';
+                
                 setTimeout(() => {
-                    e.target.style.transform = 'scale(1)';
-                }, 150);
+                    e.target.style.filter = '';
+                    e.target.style.transform = '';
+                }, 200);
                 
                 setTimeout(() => {
                     nextQuestion();
-                }, 300);
+                }, 400);
             }
         });
 
@@ -496,11 +602,11 @@
             if (currentQuestion < questions.length) {
                 setTimeout(() => {
                     questions[currentQuestion].classList.add('active');
-                }, 200);
+                }, 300);
             } else {
                 setTimeout(() => {
                     showResult();
-                }, 500);
+                }, 700);
             }
         }
 
@@ -515,7 +621,6 @@
 
             responses.forEach(response => {
                 if (response.includes('-')) {
-                    // Handle combo responses
                     response.split('-').forEach(r => counts[r]++);
                 } else {
                     counts[response]++;
@@ -532,10 +637,6 @@
             results.forEach(result => {
                 if (result.classList.contains(dominant)) {
                     result.style.display = 'block';
-                    setTimeout(() => {
-                        result.style.opacity = '1';
-                        result.style.transform = 'scale(1)';
-                    }, 100);
                 }
             });
         }
@@ -544,7 +645,6 @@
             currentQuestion = 0;
             responses = [];
             
-            // Reset all elements
             results.forEach(result => {
                 result.style.display = 'none';
             });
@@ -554,7 +654,7 @@
                 if (index === 0) {
                     setTimeout(() => {
                         q.classList.add('active');
-                    }, 300);
+                    }, 200);
                 }
             });
             
@@ -563,8 +663,19 @@
         }
 
         // Initialize
-        createStars();
-        createFloatingEmojis();
+        createFloatingElements();
+
+        // Add some glitch effects
+        setInterval(() => {
+            const elements = document.querySelectorAll('.question, .result-title');
+            const randomElement = elements[Math.floor(Math.random() * elements.length)];
+            if (randomElement) {
+                randomElement.style.textShadow = '2px 0 #ff0040, -2px 0 #00f5ff';
+                setTimeout(() => {
+                    randomElement.style.textShadow = '';
+                }, 100);
+            }
+        }, 8000);
     </script>
 </body>
 </html>
