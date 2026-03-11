@@ -162,150 +162,252 @@
             text-transform: uppercase;
             margin-bottom: 14px;
             opacity: 0.6;
+    <title>TRAUMA.EXE // Diagnostic Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Core Colors */
+            --bg-void: #030305;
+            --bg-surface: rgba(20, 20, 25, 0.7);
+            --text-main: #e2e2e2;
+            --text-muted: #6b7280;
+            
+            /* Neon Accents */
+            --accent-toxic: #39ff14;
+            --accent-toxic-glow: rgba(57, 255, 20, 0.4);
+            --accent-blood: #ff003c;
+            --accent-void: #8b00ff;
+            --accent-cyan: #00f0ff;
+            --accent-fawn: #ffb700;
+            
+            /* Specific Results */
+            --color-fight: var(--accent-blood);
+            --color-flight: var(--accent-cyan);
+            --color-freeze: var(--accent-void);
+            --color-fawn: var(--accent-fawn);
         }
 
-        .header h1 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(1.8rem, 4.5vw, 2.8rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 14px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
         }
 
-        /* True clip-path glitch */
-        .glitch-wrap {
-            display: inline-block;
-            position: relative;
-        }
-        .glitch-wrap::before,
-        .glitch-wrap::after {
-            content: attr(data-text);
-            position: absolute;
-            inset: 0;
-            font-family: inherit;
-            font-size: inherit;
-            font-weight: inherit;
-        }
-        .glitch-wrap::before {
-            color: var(--fight);
-            clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
-            animation: glitchTop 7s infinite;
-        }
-        .glitch-wrap::after {
-            color: var(--flight);
-            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-            animation: glitchBot 7s infinite;
-        }
-
-        @keyframes glitchTop {
-            0%,87%,100% { transform: translate(0);   opacity: 0; }
-            89%          { transform: translate(-4px, 1px);  opacity: 0.9; }
-            91%          { transform: translate(4px, -1px);  opacity: 0.9; }
-            93%          { transform: translate(-2px, 0);    opacity: 0.5; }
-        }
-        @keyframes glitchBot {
-            0%,85%,100% { transform: translate(0);   opacity: 0; }
-            87%          { transform: translate(4px, -1px);  opacity: 0.8; }
-            90%          { transform: translate(-4px, 1px);  opacity: 0.8; }
-            92%          { transform: translate(2px, 0);     opacity: 0.5; }
-        }
-
-        .header p {
-            font-size: 1rem;
-            color: var(--muted);
-            font-style: italic;
-        }
-
-        /* Accumulator dots */
-        .accumulator {
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-void);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
             display: flex;
-            gap: 8px;
             justify-content: center;
-            margin-bottom: 18px;
-            height: 18px;
             align-items: center;
         }
 
-        .acc-dot {
-            width: 8px; height: 8px;
+        /* --- Custom Cursor --- */
+        #cursor, #cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        #cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-toxic);
             border-radius: 50%;
-            background: var(--surface2);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        .acc-dot.fight  { background: var(--fight);  box-shadow: 0 0 10px var(--fight);  transform: scale(1.3); }
-        .acc-dot.flight { background: var(--flight); box-shadow: 0 0 10px var(--flight); transform: scale(1.3); }
-        .acc-dot.freeze { background: var(--freeze); box-shadow: 0 0 10px var(--freeze); transform: scale(1.3); }
-        .acc-dot.fawn   { background: var(--fawn);   box-shadow: 0 0 10px var(--fawn);   transform: scale(1.3); }
-
-        /* Progress */
-        .progress-wrap { margin-bottom: 28px; }
-
-        .progress-meta {
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
             display: flex;
-            justify-content: space-between;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--muted);
-            margin-bottom: 7px;
+            justify-content: center;
+            align-items: center;
         }
-
-        .progress-bar {
-            width: 100%; height: 3px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--green), var(--red), var(--violet));
-            width: 0%;
-            transition: width 0.8s cubic-bezier(0.23,1,0.32,1);
-        }
-
-        /* ── Questions ───────────────────────────────── */
-        .question-container {
-            display: none;
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.23,1,0.32,1);
-        }
-        .question-container.active  { display: block; }
-        .question-container.visible { opacity: 1; transform: translateY(0); }
-
-        .question-card {
-            background: rgba(0,0,0,0.82);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 8px;
-            padding: 38px 40px 32px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(12px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .question-card::before {
+        #cursor::after {
             content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent-toxic);
+            border-radius: 50%;
+        }
+        #cursor.hovering {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(57, 255, 20, 0.1);
+            border-color: transparent;
+        }
+        #cursor-trail {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-toxic);
+            border-radius: 50%;
+            transition: transform 0.1s linear;
+            opacity: 0.5;
+        }
+
+        /* --- CRT Effects & Background --- */
+        canvas#bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            pointer-events: none;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+        }
+
+        .crt-overlay::before {
+            content: " ";
+            display: block;
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--green), transparent);
-            opacity: 0.35;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
         }
 
-        .q-number {
+        .flicker {
+            animation: crt-flicker 0.15s infinite;
+        }
+
+        @keyframes crt-flicker {
+            0% { opacity: 0.95; }
+            100% { opacity: 1; }
+        }
+
+        /* --- Layout --- */
+        #app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Intro Screen --- */
+        #intro-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            animation: glitchFade 0.5s forwards;
+        }
+
+        .intro-title {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
-            color: var(--green);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 18px;
-            opacity: 0.55;
+            color: var(--accent-toxic);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px var(--accent-toxic-glow);
+            letter-spacing: 2px;
+            min-height: 3rem;
         }
 
-        .question {
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            color: var(--text-main);
+            max-width: 600px;
+        }
+
+        .intro-highlight {
+            color: var(--accent-toxic);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+
+        /* --- Terms of Service Checkbox --- */
+        .tos-container {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        .tos-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tos-container input {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--accent-toxic);
+            background: rgba(0,0,0,0.5);
+            position: relative;
+            cursor: none;
+        }
+
+        .tos-container input:checked {
+            background: rgba(57, 255, 20, 0.2);
+        }
+
+        .tos-container input:checked::after {
+            content: 'X';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--accent-toxic);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #btn-start {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        #btn-start.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #btn-start:disabled {
+            opacity: 0.3 !important;
+            border-color: var(--text-muted);
+            color: var(--text-muted);
+            pointer-events: none;
+            box-shadow: none;
+        }
+
+        /* --- Boot Screen --- */
+        #boot-screen {
             font-family: 'JetBrains Mono', monospace;
             font-size: clamp(1rem, 2.2vw, 1.4rem);
             font-weight: 600;
@@ -360,6 +462,40 @@
             width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
             transition: left 0.5s ease;
+            color: var(--accent-toxic);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: none; /* Hidden initially */
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            flex: 1;
+        }
+        
+        .boot-line {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: bootUp 0.3s forwards;
+        }
+
+        @keyframes bootUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            display: none; /* Hidden during boot */
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 1s ease;
+        }
+
+        header.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
         .option:hover::before { left: 100%; }
 
@@ -389,6 +525,60 @@
             display: none;
             opacity: 0;
             transition: opacity 0.8s ease;
+        h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-main);
+            text-shadow: 0 0 10px var(--accent-toxic-glow), 0 0 20px var(--accent-toxic);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--accent-toxic);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        /* --- Progress Bar --- */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-toxic);
+            box-shadow: 0 0 10px var(--accent-toxic);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- Question Area --- */
+        #quiz-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            display: none;
+        }
+
+        .question-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.4;
+            min-height: 4.2rem;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
         }
         #results.visible { opacity: 1; }
 
@@ -448,6 +638,95 @@
             text-transform: uppercase;
             margin-bottom: 28px;
             opacity: 0.6;
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option-btn {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .option-btn.animate-in {
+            animation: slideIn 0.4s forwards;
+        }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .option-btn::before {
+            content: '>';
+            position: absolute;
+            left: 1.5rem;
+            color: var(--accent-toxic);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent-toxic);
+            background: rgba(57, 255, 20, 0.05);
+            padding-left: 3rem;
+            box-shadow: inset 4px 0 0 var(--accent-toxic);
+        }
+
+        .option-btn:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .option-btn.selected {
+            background: var(--accent-toxic);
+            color: var(--bg-void);
+            font-weight: bold;
+            transform: scale(0.98);
+        }
+
+        /* --- Loading / Processing --- */
+        #processing-screen {
+            display: none;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-toxic);
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- Results Area --- */
+        #result-area {
+            display: none;
+            text-align: center;
+            animation: glitchFade 0.5s forwards;
+        }
+
+        @keyframes glitchFade {
+            0% { opacity: 0; transform: scale(0.95); filter: blur(5px); }
+            50% { filter: blur(0px); transform: translate(5px, -5px); }
+            75% { transform: translate(-5px, 5px); }
+            100% { opacity: 1; transform: scale(1) translate(0); }
         }
 
         .result-icon {
@@ -460,6 +739,14 @@
         @keyframes floatIcon {
             0%,100% { transform: translateY(0) scale(1); }
             50%     { transform: translateY(-10px) scale(1.06); }
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px currentColor);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         .result-title {
@@ -488,6 +775,11 @@
             width: 80px; height: 1px;
             margin: 0 auto 28px;
             opacity: 0.3;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
         }
         .result-card.fight  .result-divider { background: var(--fight);  }
         .result-card.flight .result-divider { background: var(--flight); }
@@ -1214,6 +1506,577 @@
 
     // ── Go ────────────────────────────────────────
     runBoot();
+        .result-desc {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            max-width: 650px;
+            margin: 0 auto 3rem auto;
+            opacity: 0.9;
+        }
+
+        .btn-restart {
+            background: transparent;
+            border: 2px solid;
+            color: inherit;
+            padding: 1rem 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-restart:hover {
+            background: currentColor;
+            color: var(--bg-void);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .question-text { font-size: 1.2rem; }
+            .option-btn { font-size: 1rem; padding: 1rem; }
+            .result-title { font-size: 2rem; }
+            #cursor, #cursor-trail { display: none; } /* Disable custom cursor on mobile */
+            * { cursor: auto !important; }
+        }
+    </style>
+</head>
+<body class="flicker">
+
+    <!-- Interactive Canvas Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- CRT Overlay -->
+    <div class="crt-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
+
+    <div id="app-container">
+        
+        <!-- Intro Screen -->
+        <div id="intro-screen">
+            <div class="intro-title" id="intro-title"></div>
+            <div class="intro-text">
+                <span class="intro-highlight">SYSTEM MESSAGE:</span> You have successfully traversed the QR bridge from the physical pages into the diagnostic matrix.<br><br>
+                Before you proceed further into the text, we must calibrate your psychological baseline. This protocol will analyze your primary malfunction patterns.<br><br>
+                Truthfulness is mandatory. Emotional damage is optional.
+            </div>
+            
+            <div class="tos-container" id="tos-container">
+                <input type="checkbox" id="tos-checkbox">
+                <label for="tos-checkbox">I acknowledge this diagnostic will violently perceive me.</label>
+            </div>
+
+            <button class="btn-restart" id="btn-start" disabled>INITIALIZE PROTOCOL</button>
+        </div>
+
+        <!-- Boot Screen -->
+        <div id="boot-screen"></div>
+
+        <!-- Main Header -->
+        <header id="main-header">
+            <h1>TRAUMA.EXE</h1>
+            <p>Diagnostic Protocol v2.0</p>
+        </header>
+
+        <!-- Progress -->
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- Quiz Area -->
+        <div id="quiz-area">
+            <div class="question-text" id="question-text"></div>
+            <div class="options-grid" id="options-grid"></div>
+        </div>
+
+        <!-- Processing Screen -->
+        <div id="processing-screen">
+            <div class="spinner">⚙️</div>
+            <div id="proc-text">ANALYZING MALFUNCTION PATTERNS...</div>
+            <div id="processing-bar" style="margin-top: 1rem; width: 200px; height: 2px; background: #333; margin-left: auto; margin-right: auto;">
+                <div style="width: 0%; height: 100%; background: var(--accent-toxic); transition: width 0.1s;" id="proc-fill"></div>
+            </div>
+        </div>
+
+        <!-- Result Area -->
+        <div id="result-area">
+            <div class="result-icon" id="res-icon"></div>
+            <div class="result-title" id="res-title"></div>
+            <div class="result-desc" id="res-desc"></div>
+            <button class="btn-restart" id="btn-restart">REBOOT SYSTEM</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. Data Structure ---
+        const quizData = [
+            {
+                question: "Do you oscillate between wanting to commit violence and dissolving into furniture? 🥊💀",
+                options: [
+                    { text: "Yes, I'm a walking contradiction of rage and dissociation", type: "fight-freeze" },
+                    { text: "I just yeeet myself out of reality entirely", type: "flight" },
+                    { text: "I grovel to the furniture for existing near it", type: "fawn" },
+                    { text: "I become the furniture. Problem solved.", type: "freeze" }
+                ]
+            },
+            {
+                question: "Have your legs filed for divorce from your consciousness? 🦵💔",
+                options: [
+                    { text: "What legs? I'm just a floating torso of anxiety", type: "freeze" },
+                    { text: "My legs are three miles ahead of my brain", type: "flight" },
+                    { text: "I'm pissed at my legs for ghosting me", type: "fight" },
+                    { text: "I'm sorry, legs. I'll try to be a better host.", type: "fawn" }
+                ]
+            },
+            {
+                question: "Do you speak exclusively in corporate trauma language? 📧⚰️",
+                options: [
+                    { text: "\"I sincerely apologize for my continued existence in this space\"", type: "fawn" },
+                    { text: "\"As per my last breakdown, f*ck you very much\"", type: "fight" },
+                    { text: "*Left meeting* *Left reality* *Left dimension*", type: "flight" },
+                    { text: "*Error 404: Human.exe has stopped responding*", type: "freeze" }
+                ]
+            },
+            {
+                question: "Did fabric texture just emotionally destroy you? 🧦💀",
+                options: [
+                    { text: "The sock committed a hate crime against my nervous system", type: "freeze" },
+                    { text: "I declared war on all cotton-poly blends", type: "fight" },
+                    { text: "I'm now ordering silk everything at 4 AM", type: "flight" },
+                    { text: "I apologized to the sock for having inadequate skin", type: "fawn" }
+                ]
+            },
+            {
+                question: "Did you verbally combust on Zoom then spiral into the void? 📹🔥",
+                options: [
+                    { text: "Yes, then I drafted my resignation from humanity", type: "fight-fawn" },
+                    { text: "I mysteriously \"lost connection\" to avoid consequences", type: "flight" },
+                    { text: "I became a frozen screenshot of regret", type: "freeze" },
+                    { text: "I offered to pay everyone's therapy bills", type: "fawn" }
+                ]
+            },
+            {
+                question: "Are you hoarding comfort objects like a depressed dragon? 🐉💀",
+                options: [
+                    { text: "Yes, and I thank each one for tolerating my neediness", type: "fawn" },
+                    { text: "I'm one with my weighted blanket now. We are eternal.", type: "freeze" },
+                    { text: "I impulse-buy emotional support items to avoid feelings", type: "flight" },
+                    { text: "I aggressively clutch my comfort items while cursing existence", type: "fight" }
+                ]
+            }
+        ];
+
+        const resultsData = {
+            fight: {
+                title: "ERR: FIGHT_MODE_ENGAGED",
+                icon: "🐍",
+                color: "var(--color-fight)",
+                desc: "Congratulations, you're a beautiful disaster of controlled chaos. Your nervous system has chosen violence as its primary operating system, but with a delightful twist of apologetic confusion. You're basically a feral cat that writes thank-you notes - ready to destroy everything while simultaneously feeling bad about it. Your trauma response is premium-grade spite with a side of existential dread."
+            },
+            flight: {
+                title: "SYS: FLIGHT_INITIATED",
+                icon: "🐇",
+                color: "var(--color-flight)",
+                desc: "You're the Houdini of emotional avoidance - except instead of escaping from handcuffs, you're escaping from feelings. Your superpower is being physically present while your soul is already three states away buying unnecessary shit online. You've turned dissociation into an art form. Your legs might have abandoned you, but your credit card is working overtime."
+            },
+            freeze: {
+                title: "CRIT: FREEZE_DETECTED",
+                icon: "🧊",
+                color: "var(--color-freeze)",
+                desc: "You're the human equivalent of a computer trying to run 47 programs at once - everything just stops working. When overwhelmed, you transform into a sentient statue with the emotional processing power of a broken calculator. You've mastered the art of being present in body while your brain has temporarily relocated to another dimension. Sock textures are your kryptonite, and you're not sorry about it."
+            },
+            fawn: {
+                title: "WARN: FAWN_SUBROUTINE",
+                icon: "🐦",
+                color: "var(--color-fawn)",
+                desc: "You're the human embodiment of \"sorry for existing\" - a walking apology with anxiety sprinkles. You've weaponized people-pleasing to an Olympic level. Your biggest fear isn't death; it's someone being mildly inconvenienced by your presence on this planet. You write apology emails to inanimate objects and thank your therapist for letting you pay them. You're basically a golden retriever having an existential crisis."
+            }
+        };
+
+        // --- 2. State Management ---
+        let currentQuestionIndex = 0;
+        let scores = { fight: 0, flight: 0, freeze: 0, fawn: 0 };
+        let isTransitioning = false;
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        // --- 3. DOM Elements ---
+        const ui = {
+            introScreen: document.getElementById('intro-screen'),
+            introTitle: document.getElementById('intro-title'),
+            tosContainer: document.getElementById('tos-container'),
+            tosCheckbox: document.getElementById('tos-checkbox'),
+            btnStart: document.getElementById('btn-start'),
+            bootScreen: document.getElementById('boot-screen'),
+            header: document.getElementById('main-header'),
+            progContainer: document.getElementById('progress-container'),
+            progBar: document.getElementById('progress-bar'),
+            quizArea: document.getElementById('quiz-area'),
+            questionText: document.getElementById('question-text'),
+            optionsGrid: document.getElementById('options-grid'),
+            procScreen: document.getElementById('processing-screen'),
+            procText: document.getElementById('proc-text'),
+            procFill: document.getElementById('proc-fill'),
+            resArea: document.getElementById('result-area'),
+            resIcon: document.getElementById('res-icon'),
+            resTitle: document.getElementById('res-title'),
+            resDesc: document.getElementById('res-desc'),
+            btnRestart: document.getElementById('btn-restart'),
+            cursor: document.getElementById('cursor'),
+            cursorTrail: document.getElementById('cursor-trail')
+        };
+
+        // --- 4. Custom Cursor Logic ---
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            ui.cursor.style.left = `${mouseX}px`;
+            ui.cursor.style.top = `${mouseY}px`;
+        });
+
+        // Trail effect loop
+        let trailX = window.innerWidth / 2;
+        let trailY = window.innerHeight / 2;
+        function animateCursor() {
+            trailX += (mouseX - trailX) * 0.2;
+            trailY += (mouseY - trailY) * 0.2;
+            ui.cursorTrail.style.left = `${trailX}px`;
+            ui.cursorTrail.style.top = `${trailY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        function addHoverListeners() {
+            const interactables = document.querySelectorAll('button, .option-btn');
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => ui.cursor.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => ui.cursor.classList.remove('hovering'));
+            });
+        }
+
+        // --- 5. Background Canvas System ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = (Math.random() * 30) + 1;
+                this.color = `rgba(${Math.floor(Math.random() * 50)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 100)}, 0.3)`;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+            update() {
+                // Drift
+                this.baseX += (Math.random() - 0.5) * 0.5;
+                this.baseY += (Math.random() - 0.5) * 0.5;
+
+                // Mouse interaction
+                let dx = mouseX - this.x;
+                let dy = mouseY - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = 150;
+                let force = (maxDistance - distance) / maxDistance;
+                let directionX = forceDirectionX * force * this.density;
+                let directionY = forceDirectionY * force * this.density;
+
+                if (distance < maxDistance) {
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 20;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 20;
+                    }
+                }
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            let numParticles = (canvas.width * canvas.height) / 15000;
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                // Connect close particles
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(57, 255, 20, ${0.1 - (dist/1000)})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+        initParticles();
+        animateCanvas();
+
+        // --- 6. Core Game Logic & Effects ---
+
+        // Text scramble effect
+        function scrambleText(element, newText, duration = 800) {
+            const chars = '!<>-_\\/[]{}—=+*^?#________';
+            let frame = 0;
+            const endFrame = Math.floor(duration / 16); // ~60fps
+            const originalText = element.innerText;
+            
+            const interval = setInterval(() => {
+                let output = '';
+                const progress = frame / endFrame;
+                
+                for(let i = 0; i < newText.length; i++) {
+                    if (progress > Math.random() || i < Math.floor(newText.length * progress)) {
+                        output += newText[i];
+                    } else {
+                        output += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+                
+                element.innerText = output;
+                frame++;
+                
+                if (frame > endFrame) {
+                    clearInterval(interval);
+                    element.innerText = newText;
+                }
+            }, 16);
+        }
+
+        // Boot Sequence
+        async function runBootSequence() {
+            ui.introScreen.style.display = 'none';
+            ui.bootScreen.style.display = 'flex';
+
+            const lines = [
+                "INITIATING TRAUMA.EXE...",
+                "LOADING NERVOUS_SYSTEM_DRIVERS...",
+                "MOUNTING REPRESSED_MEMORIES.ISO...",
+                "BYPASSING EMOTIONAL_FIREWALL...",
+                "IGNORING THERAPIST_ADVICE...",
+                "ESTABLISHING DIAGNOSTIC CONNECTION..."
+            ];
+
+            for(let i=0; i<lines.length; i++) {
+                const p = document.createElement('p');
+                p.className = 'boot-line';
+                p.innerText = lines[i];
+                p.style.animationDelay = `${i * 0.4}s`;
+                ui.bootScreen.appendChild(p);
+            }
+
+            setTimeout(() => {
+                ui.bootScreen.style.display = 'none';
+                ui.header.classList.add('visible');
+                ui.progContainer.style.display = 'block';
+                ui.quizArea.style.display = 'flex';
+                loadQuestion();
+            }, (lines.length * 400) + 1000);
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                calculateResults();
+                return;
+            }
+
+            isTransitioning = false;
+            const data = quizData[currentQuestionIndex];
+            
+            // Update Progress
+            ui.progBar.style.width = `${(currentQuestionIndex / quizData.length) * 100}%`;
+
+            // Clear previous options
+            ui.optionsGrid.innerHTML = '';
+            
+            // Scramble Question Text
+            scrambleText(ui.questionText, data.question);
+
+            // Stagger load options
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.style.animationDelay = `${(index * 0.1) + 0.5}s`;
+                btn.classList.add('animate-in');
+                
+                btn.onclick = () => handleAnswer(opt.type, btn);
+                ui.optionsGrid.appendChild(btn);
+            });
+
+            setTimeout(addHoverListeners, 1000); // Re-bind custom cursor events
+        }
+
+        function handleAnswer(typesString, btnElement) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            // Visual feedback
+            btnElement.classList.add('selected');
+            
+            // Add scores (handle combos like "fight-freeze")
+            const types = typesString.split('-');
+            types.forEach(t => scores[t]++);
+
+            // Delay before next question
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 600);
+        }
+
+        function calculateResults() {
+            ui.quizArea.style.display = 'none';
+            ui.progContainer.style.display = 'none';
+            ui.header.style.display = 'none';
+            ui.procScreen.style.display = 'block';
+
+            const processingPhrases = [
+                "SCANNING NERVOUS SYSTEM...",
+                "QUANTIFYING CAFFEINE RELIANCE...",
+                "BYPASSING AVOIDANCE MECHANISMS...",
+                "COMPILING UNREAD EMAILS...",
+                "CALCULATING EXISTENTIAL DREAD...",
+                "FINALIZING ROAST..."
+            ];
+
+            // Fake processing bar and text rotation
+            let prog = 0;
+            let phraseIndex = 0;
+            
+            ui.procText.innerText = processingPhrases[0];
+
+            const int = setInterval(() => {
+                prog += Math.random() * 15;
+                
+                // Swap text occasionally based on progress
+                if (prog > (phraseIndex + 1) * (100 / processingPhrases.length) && phraseIndex < processingPhrases.length - 1) {
+                    phraseIndex++;
+                    ui.procText.innerText = processingPhrases[phraseIndex];
+                    scrambleText(ui.procText, processingPhrases[phraseIndex], 400);
+                }
+
+                if(prog >= 100) {
+                    prog = 100;
+                    clearInterval(int);
+                    setTimeout(showFinalResult, 800);
+                }
+                ui.procFill.style.width = `${prog}%`;
+            }, 250);
+        }
+
+        function showFinalResult() {
+            ui.procScreen.style.display = 'none';
+            
+            // Find dominant score
+            let dominant = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const resData = resultsData[dominant];
+
+            // Set result styling and content
+            ui.resArea.style.display = 'block';
+            ui.resArea.style.color = resData.color;
+            ui.resArea.style.textShadow = `0 0 15px ${resData.color}`;
+            ui.btnRestart.style.borderColor = resData.color;
+            ui.btnRestart.style.color = resData.color;
+            
+            ui.resIcon.innerText = resData.icon;
+            ui.resTitle.innerText = resData.title;
+            ui.resDesc.innerText = resData.desc;
+
+            // Update particle colors to match result
+            particles.forEach(p => {
+                p.color = resData.color.replace('var(--', '').replace(')', ''); // hacky var fallback
+                // Let's just force a nice opacity version
+                if(dominant === 'fight') p.color = 'rgba(255, 0, 60, 0.4)';
+                if(dominant === 'flight') p.color = 'rgba(0, 240, 255, 0.4)';
+                if(dominant === 'freeze') p.color = 'rgba(139, 0, 255, 0.4)';
+                if(dominant === 'fawn') p.color = 'rgba(255, 183, 0, 0.4)';
+            });
+
+            addHoverListeners();
+        }
+
+        ui.btnRestart.addEventListener('click', () => {
+            scores = { fight: 0, flight: 0, freeze: 0, fawn: 0 };
+            currentQuestionIndex = 0;
+            
+            ui.resArea.style.display = 'none';
+            ui.header.style.display = 'block';
+            ui.progContainer.style.display = 'block';
+            ui.quizArea.style.display = 'flex';
+            
+            // Reset particles to generic toxic green
+            particles.forEach(p => p.color = `rgba(57, 255, 20, 0.3)`);
+            
+            loadQuestion();
+        });
+
+        // Toggle Start Button based on TOS
+        ui.tosCheckbox.addEventListener('change', (e) => {
+            ui.btnStart.disabled = !e.target.checked;
+        });
+
+        ui.btnStart.addEventListener('click', runBootSequence);
+
+        // Start Boot Sequence
+        window.onload = () => {
+            // Scramble the intro title
+            scrambleText(ui.introTitle, "QR_LINK_ESTABLISHED", 1000);
+            
+            // Fade in the TOS and button
+            setTimeout(() => {
+                ui.tosContainer.classList.add('visible');
+                ui.btnStart.classList.add('visible');
+                addHoverListeners(); // Bind the custom cursor to the new button
+            }, 1200);
+        };
+
     </script>
 </body>
 </html>
